@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>狸貓黑市</title>
+</head>
+
+
+<style type='text/css'>
+  body {
+    padding: 0;
+    margin: 0;
+    background-color: gold;
+  }
+
+  h1 {
+    font-size: 80px;
+    display: block;
+    width: 100%;
+    color: purple;
+    text-align: center;
+    margin: 10px 0;
+  }
+
+  .cage {
+    background-color: white;
+    margin: 20px auto;
+    width: 1500px;
+    height: 600px;
+    border: 20px solid purple;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+  }
+
+  .prey {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+
+  .prey-showcase {
+    width: 250px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+  }
+
+
+
+  img {
+    width: 250px;
+    cursor: pointer;
+
+  }
+
+  img:hover {
+    transform: scale(1.5);
+  }
+
+  p.tag {
+    padding: 0 10px;
+    height: 30px;
+    position: absolute;
+    top: -20px;
+    left: -10px;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+  }
+
+  p.Normal {
+    background-color: grey;
+  }
+
+  p.Rare {
+    background-color: green;
+  }
+
+  p.Super-Rare {
+    background-color: blue;
+  }
+
+  p.Superior-Super-Rare {
+    background-color: purple;
+  }
+
+  p.Ultra-Rare {
+    background-color: gold;
+  }
+
+
+
+  h2 {
+    margin: 0;
+    font-size: 40px;
+  }
+
+  p.price {
+    margin: 0;
+    font-size: 30px;
+  }
+
+  button {
+    margin: 50px 20px 0;
+    cursor: pointer;
+    border: 0;
+    width: 70px;
+    height: 70px;
+    text-align: center;
+    line-height: 70px;
+    background-color: purple;
+    color: gold;
+    font-size: 40px;
+    border-radius: 20px;
+
+
+  }
+
+  button:hover {
+    box-shadow: 5px 5px 1px rgb(192, 106, 192);
+  }
+
+  button:active {
+    transform: translate(5px, 5px)
+  }
+
+  span.count {
+    text-align: center;
+    width: 50px;
+    display: inline-block;
+    font-size: 30px;
+  }
+
+
+  .total,
+  .checkout {
+    float: right;
+    padding: 0 30px;
+    margin-right: 100px;
+    height: 80px;
+    line-height: 80px;
+    background-color: purple;
+    color: gold;
+    font-size: 40px;
+    border-radius: 20px;
+  }
+
+  .checkout {
+    cursor: pointer;
+  }
+
+  .checkout:hover {
+    box-shadow: 5px 5px 1px rgb(192, 106, 192);
+  }
+
+  .checkout:active {
+    transform: translate(5px, 5px)
+  }
+</style>
+
+<body>
+
+
+  <div id="app">
+    <h1>狸貓黑市</h1>
+    <div class="cage">
+      <div v-for="prey in preyList" :key="prey.id" class="prey">
+        <div class="prey-showcase"><img :src="prey.imgSrc" alt=""></div>
+        <p class="tag" :class="prey.tag">{{prey.tag}}</p>
+
+        <h2>{{prey.preyName}}</h2>
+        <p class="price">彩虹幣🌈{{prey.price}}</p>
+
+        <div class="pick-me">
+          <button @click="discard(prey.id)">-</button>
+          <span class="count">{{cart.has(prey.id) ? cart.get(prey.id) : 0}}</span>
+          <button @click="add(prey.id)">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="checkout">
+      結帳
+    </div>
+    <div class="total">
+      總計：彩虹幣🌈{{total}}
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          cart: new Map(),
+          totalPrice: 0,
+          preyList: [{
+              id: "Tanuki-001",
+              imgSrc: "./img/狸貓兔子.png",
+              tag: "Super-Rare",
+              preyName: "狸貓兔子",
+              price: 66666
+            },
+            {
+              id: "Tanuki-002",
+              imgSrc: "./img/禿頭海豹吸血鬼.png",
+              tag: "Ultra-Rare",
+              preyName: "禿頭海豹吸血鬼",
+              price: 870000
+            },
+            {
+              id: "Tanuki-003",
+              imgSrc: "./img/狸貓好乖.png",
+              tag: "Normal",
+              preyName: "很乖的狸貓",
+              price: 10000
+            },
+            {
+              id: "Tanuki-004",
+              imgSrc: "./img/狸貓地瓜堆.png",
+              tag: "Rare",
+              preyName: "地瓜狸貓",
+              price: 40000
+            },
+            {
+              id: "Tanuki-005",
+              imgSrc: "./img/狸貓寶寶.png",
+              tag: "Superior-Super-Rare",
+              preyName: "狸貓小寶寶",
+              price: 150000
+
+            },
+          ]
+        }
+      },
+      computed: {
+        total() {
+          let vm = this;
+          let total = 0;
+          vm.cart.forEach((preyCount, preyID) => {
+            total += preyCount * getPrice(preyID)
+
+          });
+          return total;
+
+          function getPrice(id) {
+            for (let i = 0; i < vm.preyList.length; i++) {
+              if (vm.preyList[i].id == id) {
+                return vm.preyList[i].price;
+              }
+            }
+
+            return 0;
+            //例外處理
+          }
+        }
+      },
+      methods: {
+        discard(id) {
+          let count = (this.cart.has(id)) ? this.cart.get(id) : 0;
+          if (count > 1) {
+            this.cart.set(id, --count);
+          } else {
+            this.cart.delete(id)
+          }
+          console.log(this.cart);
+        },
+        add(id) {
+          let count = (this.cart.has(id)) ? this.cart.get(id) : 0;
+          this.cart.set(id, ++count);
+
+          console.log(this.cart);
+        },
+
+
+      }
+    }).mount("#app");
+  </script>
+</body>
+
+
+</html>
