@@ -4,8 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍠</text></svg>">
   <title>狸貓黑市</title>
 </head>
+
 
 
 <style type='text/css'>
@@ -164,6 +167,26 @@
   .checkout:active {
     transform: translate(5px, 5px)
   }
+
+  a.donate {
+
+    position: absolute;
+    margin-left: 50px;
+    display: block;
+    text-decoration: none;
+  }
+  a.donate img{
+    width: 130px;
+    height: 130px;
+  }
+/* 
+  a.donate:hover {
+    transform: translate(3px, 3px)
+  }
+
+  a.donate:active {
+    transform: translate(3px, 3px)
+  } */
 </style>
 
 <body>
@@ -192,6 +215,7 @@
     <div class="total">
       總計：彩虹幣🌈{{total}}
     </div>
+    <a class="donate" target="_blank" href="https://www.buymeacoffee.com/tanuki.jr"><img src="https://em-content.zobj.net/thumbs/320/apple/118/roasted-sweet-potato_1f360.png" alt=""></a>
   </div>
 
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -278,7 +302,7 @@
 
           console.log(this.cart);
         },
-        alert(){
+        alert() {
           window.alert("你又沒有彩虹幣!!!")
         }
 
